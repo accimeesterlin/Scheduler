@@ -17,7 +17,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      current_user:{
+      current_user: {
         selected: false
       }
     };
@@ -28,11 +28,9 @@ class App extends Component {
   }
 
   pick_time = (id, hour, index) => {
-    const {time} = this.props.schedule
-
+    const { time } = this.props.schedule
     let current_user = time[index];
 
-    console.log("Current User: ", current_user);
     this.setState({
       open: true,
       id,
@@ -68,9 +66,7 @@ class App extends Component {
     this.props.dispatch(user_selection(user));
     NotificationManager.info(`You selected ${hour} `, "Yupppeeeee, you did");
     this.setState({
-      open: false,
-      name: '',
-      phoneNumber: ''
+      open: false
     });
   };
 
@@ -85,12 +81,9 @@ class App extends Component {
 
   render() {
     const { open, current_user } = this.state;
-
     const { time, edit, size } = this.props.schedule;
-    console.log("Props: ", this.props.schedule);
-    console.log("State: ", this.state);
 
-
+    console.log("State: ", this.state)
     return (
       <div>
         {
@@ -100,7 +93,7 @@ class App extends Component {
               className={selected ? "selected hour" : "hour"}
               onClick={() => this.pick_time(id, hour, index)}
             >
-              <p >Time: {hour} </p>
+              <p >Hour: {hour} </p>
             </div>
           )) : ""
         }
@@ -108,11 +101,12 @@ class App extends Component {
 
         <Modal size={size} open={open} onClose={this.close}>
           <Modal.Header>
-            Enter the your name and address
+            {current_user.selected && edit ? "This is your information" :
+              (current_user.selected ? "Edit your info" : "Enter name and phone number")}
           </Modal.Header>
           <Modal.Content>
             {
-              current_user.selected && edit  ? <Display {...this.state}/> : <Edit
+              current_user.selected && edit ? <Display {...this.state} /> : <Edit
                 submit_result={this.submit_result}
                 get_values={this.get_values}
               />
@@ -133,13 +127,13 @@ class App extends Component {
 }
 
 
-const Display = ({ current_user: {hour, info: {name, phoneNumber}} }) => {
+const Display = ({ current_user: { hour, info: { name, phoneNumber } } }) => {
 
-  
+
   return (
     <div>
       <h2>You picked!</h2>
-      <h4>Name: { name }</h4>
+      <h4>Name: {name}</h4>
       <p>Hour Selected: {hour} </p>
       <p>Phone number: {phoneNumber} </p>
     </div>
@@ -156,16 +150,17 @@ const Edit = ({ submit_result, get_values }) => {
       <Form size={"small"} >
         <Form.Group widths='equal'>
           <Form.Field
-            label='First name'
+            label='Name'
             control='input'
             name="name"
             placeholder='Name...'
             onChange={get_values} />
           <Form.Field
-            label='Last name'
+            label='Phone number'
             control='input'
             name="phoneNumber"
-            placeholder='Phone number...'
+            type="number"
+            placeholder='(xxx) xxx-xxxx'
             onChange={get_values} />
         </Form.Group>
         <Button type='submit' onClick={submit_result}>Submit</Button>
@@ -176,7 +171,6 @@ const Edit = ({ submit_result, get_values }) => {
   );
 }
 
-// name and phone number
 
 const mapPropsToState = (state) => {
   return {
