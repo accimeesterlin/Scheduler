@@ -24,8 +24,7 @@ const schedule = (state = initial_state, action) => {
                     } else {
                         return element;
                     }
-                }),
-                open:true
+                })
             };
             break;
 
@@ -33,6 +32,21 @@ const schedule = (state = initial_state, action) => {
             return {
                 ...state,
                 edit: action.bool
+            }   
+            
+        case "USER_SELECTION":
+            return {
+                ...state,
+                time: state.time.map((element) => {
+                    if(element.id === action.info.id){
+                        element["info"] = {
+                            ...action.info
+                        }
+                        return element;
+                    } else{
+                        return element;
+                    }
+                })
             }    
         default:
             return state;

@@ -5,7 +5,8 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import {
   set_time,
   select_time,
-  edit_toggle
+  edit_toggle,
+  user_selection
 } from "./actions/actions";
 import 'react-notifications/lib/notifications.css';
 import times from './times';
@@ -15,19 +16,31 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      current_user:{
+        selected: false
+      }
+    };
   }
 
   componentDidMount() {
     this.props.dispatch(set_time(times));
   }
 
-  pick_time = (id, hour) => {
+  pick_time = (id, hour, index) => {
+    const {time} = this.props.schedule
+
+    let current_user = time[index];
+
+    console.log("Current User: ", current_user);
     this.setState({
       open: true,
       id,
-      hour
+      hour,
+      index,
+      current_user
     });
+
   };
 
   get_values = (event) => {
@@ -41,13 +54,23 @@ class App extends Component {
 
 
   submit_result = () => {
-    const { hour, id } = this.state;
+    const { hour, id, name, phoneNumber, index } = this.state;
+
+    let user = {
+      name,
+      phoneNumber,
+      id
+    };
+
+    this.edit_status(false)
+
     this.props.dispatch(select_time(id));
+    this.props.dispatch(user_selection(user));
     NotificationManager.info(`You selected ${hour} `, "Yupppeeeee, you did");
     this.setState({
       open: false,
       name: '',
-      address: ''
+      phoneNumber: ''
     });
   };
 
@@ -61,20 +84,21 @@ class App extends Component {
 
 
   render() {
-    const { open, size } = this.state;
+    const { open, current_user } = this.state;
 
-    const { time, edit } = this.props.schedule;
+    const { time, edit, size } = this.props.schedule;
     console.log("Props: ", this.props.schedule);
     console.log("State: ", this.state);
+
 
     return (
       <div>
         {
-          time ? time.map(({ hour, id, selected }) => (
+          time ? time.map(({ hour, id, selected }, index) => (
             <div
               key={id}
               className={selected ? "selected hour" : "hour"}
-              onClick={() => this.pick_time(id, hour)}
+              onClick={() => this.pick_time(id, hour, index)}
             >
               <p >Time: {hour} </p>
             </div>
@@ -88,7 +112,7 @@ class App extends Component {
           </Modal.Header>
           <Modal.Content>
             {
-              edit ? <Display /> : <Edit
+              current_user.selected && edit  ? <Display {...this.state}/> : <Edit
                 submit_result={this.submit_result}
                 get_values={this.get_values}
               />
@@ -109,12 +133,15 @@ class App extends Component {
 }
 
 
-const Display = ({ time, address }) => {
+const Display = ({ current_user: {hour, info: {name, phoneNumber}} }) => {
+
+  
   return (
     <div>
       <h2>You picked!</h2>
-      <p>Time: {time} </p>
-      <p>Address: {address} </p>
+      <h4>Name: { name }</h4>
+      <p>Hour Selected: {hour} </p>
+      <p>Phone number: {phoneNumber} </p>
     </div>
   );
 };
@@ -137,8 +164,8 @@ const Edit = ({ submit_result, get_values }) => {
           <Form.Field
             label='Last name'
             control='input'
-            name="address"
-            placeholder='Address...'
+            name="phoneNumber"
+            placeholder='Phone number...'
             onChange={get_values} />
         </Form.Group>
         <Button type='submit' onClick={submit_result}>Submit</Button>

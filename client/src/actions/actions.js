@@ -21,3 +21,10 @@ export const edit_toggle = (bool) => {
         bool
     }
 };
+
+export const user_selection = (info) => {
+    return {
+        type:"USER_SELECTION",
+        info
+    }
+};
