@@ -3,7 +3,6 @@
 const initial_state = {
     active: false,
     edit: false,
-    open: false,
     size: "small"
 };
 

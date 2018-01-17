@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Modal, Divider, Form } from 'semantic-ui-react';
+import { Button, Divider, Modal, Form } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import {
@@ -11,6 +11,7 @@ import {
 import 'react-notifications/lib/notifications.css';
 import times from './times';
 import "./App.css";
+import ModalComponent from "./components/Modal";
 
 class App extends Component {
   constructor(props) {
@@ -99,25 +100,14 @@ class App extends Component {
         }
 
 
-        <Modal size={size} open={open} onClose={this.close}>
-          <Modal.Header>
-            {current_user.selected && edit ? "This is your information" :
-              (current_user.selected ? "Edit your info" : "Enter name and phone number")}
-          </Modal.Header>
-          <Modal.Content>
-            {
-              current_user.selected && edit ? <Display {...this.state} /> : <Edit
-                submit_result={this.submit_result}
-                get_values={this.get_values}
-              />
-            }
-          </Modal.Content>
-          <Modal.Actions>
-            <Button negative onClick={() => this.edit_status(edit)}>
-              {edit ? "Edit time" : "See time"}
-            </Button>
-          </Modal.Actions>
-        </Modal>
+        <ModalComponent {...this.state }  { ...this.props.schedule } edit_status={this.edit_status} close = {this.close}>
+          {
+            current_user.selected && edit ? <Display {...this.state} /> : <Edit
+              submit_result={this.submit_result}
+              get_values={this.get_values}
+            />
+          }
+        </ModalComponent>
 
 
         <NotificationContainer />
