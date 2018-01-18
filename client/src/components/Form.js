@@ -2,7 +2,10 @@
 import React from "react";
 import { Form, Button } from "semantic-ui-react";
 
-const FormComponent = ({ submit_result, get_values }) => {
+const FormComponent = ({
+    submit_result,
+    get_values
+}) => {
 
     return (
         <Form size={"small"} >

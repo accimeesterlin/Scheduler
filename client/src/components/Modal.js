@@ -2,7 +2,17 @@ import React from "react";
 import { Button, Modal } from "semantic-ui-react";
 
 
-const ModalComponent = ({ size, open, current_user: { edit, selected }, children, edit_status, close }) => {
+const ModalComponent = ({
+    size,
+    open,
+    current_user: { 
+        edit, 
+        selected 
+    },
+    children,
+    edit_status,
+    close
+}) => {
 
     return (
         <Modal size={size} open={open} onClose={close}>

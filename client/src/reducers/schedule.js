@@ -1,8 +1,6 @@
 
 
 const initial_state = {
-    active: false,
-    // edit: false,
     size: "small"
 };
 

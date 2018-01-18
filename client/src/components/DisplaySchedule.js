@@ -1,7 +1,15 @@
 import React from "react";
 
 
-const Display = ({ current_user: { hour, info: { name, phoneNumber } } }) => {
+const Display = ({ 
+    current_user: { 
+        hour, 
+        info: { 
+            name, 
+            phoneNumber 
+        } 
+    } 
+}) => {
     return (
         <div>
             <h2>You picked!</h2>
@@ -11,5 +19,6 @@ const Display = ({ current_user: { hour, info: { name, phoneNumber } } }) => {
         </div>
     );
 };
+
 
 export default Display;

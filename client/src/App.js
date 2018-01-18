@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { 
+  NotificationContainer, 
+  NotificationManager 
+} from 'react-notifications';
 import {
   set_time,
   select_time,
@@ -30,6 +33,13 @@ class App extends Component {
     this.props.dispatch(set_time(times));
   }
 
+  /**
+   * Keep track of the selected user in the state
+   * and so we can display info in the modal
+   * @param id
+   * @param hour
+   * @param index
+   */
   pick_time = (id, hour, index) => {
     const { time } = this.props.schedule
     let current_user = time[index];
@@ -44,6 +54,10 @@ class App extends Component {
 
   };
 
+  /**
+   * Get inputs such as name and phone number
+   * @param event
+   */
   get_values = (event) => {
     const name = event.target.name;
     const values = event.target.value;
@@ -51,9 +65,17 @@ class App extends Component {
     this.setState({
       [name]: values
     });
+    
   };
 
-
+  /**
+   * Add user info under the time selection
+   * Once clicked, modal will closed
+   * Edit mode reset to false so next time they click
+   * they can view their scheduled info
+   * Keep track that user selected a time
+   * Pops up a notification to confirm that time has successfully been selected
+   */
   submit_result = () => {
     const { hour, id, name, phoneNumber } = this.state;
     const { dispatch } = this.props
@@ -64,23 +86,34 @@ class App extends Component {
       id
     };
 
-
     dispatch(select_time(id));
     dispatch(user_selection(user));
     NotificationManager.info(`You selected ${hour} `, "Yupppeeeee, you did");
     this.setState({ open: false });
     this.edit_status(false)
-    
-
-    console.log("State On Submit: ", this.state)
   };
 
+
+
+
+  /**
+   * Close the modal on click anywhere
+   * Reset edit mode to false so user can see
+   * their info next time they click
+   */
   close = () => {
     this.edit_status(false)
     this.setState({ open: false, current_user:{ edit: false} })
   };
 
 
+  /**
+   * Toggle the edit mode
+   * User not allowed to see the view info
+   * If they haven't filled out the form. 
+   * Error notifications will appear
+   * @param bool
+   */
   edit_status = (bool) => {
     const {selected, id} = this.state.current_user;
     if(selected){
@@ -95,7 +128,6 @@ class App extends Component {
   render() {
     const { current_user : { edit, selected }} = this.state;
     const { time } = this.props.schedule;
-    console.log("State: ", this.state);
 
     return (
       <div>
