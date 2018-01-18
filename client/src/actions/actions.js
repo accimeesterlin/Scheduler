@@ -15,10 +15,11 @@ export const select_time = (id) => {
     }
 };
 
-export const edit_toggle = (bool) => {
+export const edit_toggle = (bool, id) => {
     return{
         type:"EDIT_TOGGLE",
-        bool
+        bool,
+        id
     }
 };
 

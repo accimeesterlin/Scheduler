@@ -2,7 +2,7 @@
 
 const initial_state = {
     active: false,
-    edit: false,
+    // edit: false,
     size: "small"
 };
 
@@ -11,7 +11,6 @@ const schedule = (state = initial_state, action) => {
     switch (action.type) {
         case "TIME":
             return { ...state, time: action.time };
-            break;
 
         case "TIME_SELECTED":
             return {
@@ -25,12 +24,19 @@ const schedule = (state = initial_state, action) => {
                     }
                 })
             };
-            break;
 
         case "EDIT_TOGGLE":
             return {
                 ...state,
-                edit: action.bool
+                time: state.time.map((element) => {
+                    if(element.id === action.id){
+                        element.edit = action.bool;
+                        return element;
+                    } else{
+                        return element
+                    }
+                    
+                })
             }   
             
         case "USER_SELECTION":

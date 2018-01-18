@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Button, Divider, Modal, Form } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import {
@@ -12,6 +11,8 @@ import 'react-notifications/lib/notifications.css';
 import times from './times';
 import "./App.css";
 import ModalComponent from "./components/Modal";
+import DisplaySchedule from "./components/DisplaySchedule";
+import Form from "./components/Form";
 
 class App extends Component {
   constructor(props) {
@@ -19,7 +20,8 @@ class App extends Component {
 
     this.state = {
       current_user: {
-        selected: false
+        selected: false,
+        edit:false
       }
     };
   }
@@ -53,7 +55,8 @@ class App extends Component {
 
 
   submit_result = () => {
-    const { hour, id, name, phoneNumber, index } = this.state;
+    const { hour, id, name, phoneNumber } = this.state;
+    const { dispatch } = this.props
 
     let user = {
       name,
@@ -61,30 +64,39 @@ class App extends Component {
       id
     };
 
-    this.edit_status(false)
 
-    this.props.dispatch(select_time(id));
-    this.props.dispatch(user_selection(user));
+    dispatch(select_time(id));
+    dispatch(user_selection(user));
     NotificationManager.info(`You selected ${hour} `, "Yupppeeeee, you did");
-    this.setState({
-      open: false
-    });
+    this.setState({ open: false });
+    this.edit_status(false)
+    
+
+    console.log("State On Submit: ", this.state)
   };
 
-  close = () => this.setState({ open: false })
+  close = () => {
+    this.edit_status(false)
+    this.setState({ open: false, current_user:{ edit: false} })
+  };
 
 
   edit_status = (bool) => {
-    this.props.dispatch(edit_toggle(!bool));
+    const {selected, id} = this.state.current_user;
+    if(selected){
+      this.props.dispatch(edit_toggle(bool, id));
+    } else{
+      NotificationManager.error(`Enter your info in order to be able to see it`);
+    }
   };
 
 
 
   render() {
-    const { open, current_user } = this.state;
-    const { time, edit, size } = this.props.schedule;
+    const { current_user : { edit, selected }} = this.state;
+    const { time } = this.props.schedule;
+    console.log("State: ", this.state);
 
-    console.log("State: ", this.state)
     return (
       <div>
         {
@@ -94,15 +106,15 @@ class App extends Component {
               className={selected ? "selected hour" : "hour"}
               onClick={() => this.pick_time(id, hour, index)}
             >
-              <p >Hour: {hour} </p>
+              <p >{hour} </p>
             </div>
           )) : ""
         }
 
 
-        <ModalComponent {...this.state }  { ...this.props.schedule } edit_status={this.edit_status} close = {this.close}>
+        <ModalComponent {...this.state }  { ...this.props.schedule } edit_status={this.edit_status} close={this.close}>
           {
-            current_user.selected && edit ? <Display {...this.state} /> : <Edit
+            selected && !edit ? <DisplaySchedule {...this.state} /> : <Form
               submit_result={this.submit_result}
               get_values={this.get_values}
             />
@@ -117,49 +129,6 @@ class App extends Component {
 }
 
 
-const Display = ({ current_user: { hour, info: { name, phoneNumber } } }) => {
-
-
-  return (
-    <div>
-      <h2>You picked!</h2>
-      <h4>Name: {name}</h4>
-      <p>Hour Selected: {hour} </p>
-      <p>Phone number: {phoneNumber} </p>
-    </div>
-  );
-};
-
-
-
-const Edit = ({ submit_result, get_values }) => {
-
-  return (
-    <div>
-
-      <Form size={"small"} >
-        <Form.Group widths='equal'>
-          <Form.Field
-            label='Name'
-            control='input'
-            name="name"
-            placeholder='Name...'
-            onChange={get_values} />
-          <Form.Field
-            label='Phone number'
-            control='input'
-            name="phoneNumber"
-            type="number"
-            placeholder='(xxx) xxx-xxxx'
-            onChange={get_values} />
-        </Form.Group>
-        <Button type='submit' onClick={submit_result}>Submit</Button>
-        <Divider hidden />
-      </Form>
-
-    </div>
-  );
-}
 
 
 const mapPropsToState = (state) => {
