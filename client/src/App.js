@@ -16,8 +16,10 @@ import "./App.css";
 import ModalComponent from "./components/Modal";
 import DisplaySchedule from "./components/DisplaySchedule";
 import Form from "./components/Form";
+import {formatPhoneNumber} from "./utils";
 
-class App extends Component {
+
+export class App extends Component {
   constructor(props) {
     super(props);
 
@@ -60,7 +62,14 @@ class App extends Component {
    */
   get_values = (event) => {
     const name = event.target.name;
-    const values = event.target.value;
+    let values = event.target.value;
+
+    
+
+    if(name === "phoneNumber" && formatPhoneNumber(values).length === 14){
+      values = formatPhoneNumber(values)
+      console.log("State: ", this.state);
+    }
 
     this.setState({
       [name]: values
@@ -128,9 +137,8 @@ class App extends Component {
   render() {
     const { current_user : { edit, selected }} = this.state;
     const { time } = this.props.schedule;
-
     return (
-      <div>
+      <div className = "hour__container">
         {
           time ? time.map(({ hour, id, selected }, index) => (
             <div

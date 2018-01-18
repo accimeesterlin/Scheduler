@@ -1,12 +1,22 @@
 .hour{
-  background:lightgrey;
+  background:#046fa9;
   border:1px solid rgba(0, 0, 0, 0);
-  box-shadow: 10px 5px 5px #888888;
+  box-shadow: 10px 5px 5px #e1e8ed;
   margin:10px;
-  width:200px;
+  width:150px;
   padding: 10px;
   border-radius: 4px;
   cursor: pointer;
+  color: #fff;
+}
+
+.hour__container{
+  background: #fbfbfb;
+  border: #e1e8ed solid 1px;
+  width:230px;
+  margin:10px;
+  padding: 10px;
+  border-radius:4px;
 }
 
 .selected{

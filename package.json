@@ -15,6 +15,7 @@
     "concurrently": "^3.5.1",
     "cookie-parser": "^1.4.3",
     "dotenv": "^4.0.0",
+    "enzyme": "^3.3.0",
     "express": "^4.16.2",
     "middleware": "^1.0.0",
     "mongoose": "^4.13.9",
