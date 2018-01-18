@@ -32,7 +32,7 @@ export class App extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(set_time(times));
+    this.props.set_time(times);
   }
 
   /**
@@ -87,7 +87,7 @@ export class App extends Component {
    */
   submit_result = () => {
     const { hour, id, name, phoneNumber } = this.state;
-    const { dispatch } = this.props
+    const { select_time, user_selection } = this.props
 
     let user = {
       name,
@@ -95,8 +95,8 @@ export class App extends Component {
       id
     };
 
-    dispatch(select_time(id));
-    dispatch(user_selection(user));
+    select_time(id)
+    user_selection(user)
     NotificationManager.info(`You selected ${hour} `, "Yupppeeeee, you did");
     this.setState({ open: false });
     this.edit_status(false)
@@ -126,7 +126,7 @@ export class App extends Component {
   edit_status = (bool) => {
     const {selected, id} = this.state.current_user;
     if(selected){
-      this.props.dispatch(edit_toggle(bool, id));
+      this.props.edit_toggle(bool, id);
     } else{
       NotificationManager.error(`Enter your info in order to be able to see it`);
     }
@@ -177,4 +177,14 @@ const mapPropsToState = (state) => {
   }
 };
 
-export default connect(mapPropsToState)(App);
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    set_time: (times) => dispatch(set_time(times)),
+    select_time: (id) => dispatch(select_time(id)),
+    edit_toggle: (bool, id) => dispatch(edit_toggle(bool, id)),
+    user_selection: (user) => dispatch(user_selection(user))
+  }
+}
+
+export default connect(mapPropsToState, mapDispatchToProps)(App);
