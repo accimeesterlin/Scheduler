@@ -1,4 +1,4 @@
-
+import axios from "axios";
 
 // Verified *2
 export const set_time = (time) => {
@@ -45,3 +45,12 @@ export const set_info = (name, value, id) => {
         id
     }
 };
+
+export const geolocation = () => {
+    return {
+        type:"GET_GEOLOCATION",
+        payload:axios.get("http://ip-api.com/json")
+    }
+};  
+
+

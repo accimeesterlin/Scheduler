@@ -5,12 +5,29 @@ li{
 
 
 
+
 /* Custom CSS */
 
 .center{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.full_layout{
+  display: flex;
+  justify-content: space-between;
+}
+
+@media(max-width : 414px) {
+  .full_layout{
+    flex-direction: column-reverse;
+  }
+} 
+
+.half_layout{
+  display: flex;
+  justify-content: space-around;
 }
 
 .column{
@@ -32,19 +49,6 @@ header, footer{
 main{
   flex:1;
 }
-
-.hour{
-  background:#046fa9;
-  border:1px solid rgba(0, 0, 0, 0);
-  box-shadow: 10px 5px 5px #e1e8ed;
-  margin:10px;
-  width:150px;
-  padding: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  color: #fff;
-}
-
 
 
 

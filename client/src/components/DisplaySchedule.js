@@ -9,7 +9,7 @@ const Display = ({
             name, 
             phoneNumber 
         } 
-    } 
+    }
 }) => {
     return (
         <div>

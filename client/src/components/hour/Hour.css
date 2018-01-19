@@ -1,0 +1,54 @@
+.main{
+    width:80%;
+    /* border:1px solid red; */
+    margin-top: 20px;
+    padding: 30px;
+}
+
+.display_appointments{
+    width:40%;
+    background: #f6f6f6;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 10px 15px 15px #e1e8ed;
+}
+
+
+
+.display_appointments div{
+    border:1px solid #e1e8ed;
+    padding: 5px;
+    margin:5px;
+    border-radius: 4px;
+    
+}
+.display_appointments p{
+    color:#555;
+}
+
+.hour{
+    background:#046fa9;
+    border:1px solid rgba(0, 0, 0, 0);
+    box-shadow: 10px 5px 5px #e1e8ed;
+    margin:10px;
+    width:150px;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #fff;
+  }
+  
+  @media(max-width : 414px) {
+    .display_appointments{
+        width:100%;
+    }
+
+    .main{
+        padding: 10px;
+        width:90%;
+    }
+
+    .hour{
+        width:100%;
+    }
+  } 

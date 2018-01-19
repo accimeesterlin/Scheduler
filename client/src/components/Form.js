@@ -36,7 +36,7 @@ const FormComponent = ({
                     name="phoneNumber"
                     type="number"
                     value = {info ? phoneNumber : ''}
-                    placeholder='(xxx) xxx-xxxx'
+                    placeholder='xxxxxxxxxx'
                     onChange={get_values} />
             </Form.Group>
             <Button type='submit' onClick={submit_result}>Submit</Button>

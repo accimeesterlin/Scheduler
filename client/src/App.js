@@ -9,7 +9,8 @@ import {
   select_time,
   edit_toggle,
   user_selection,
-  set_info
+  set_info,
+  geolocation
 } from "./actions/actions";
 import {
   Header,
@@ -25,6 +26,8 @@ import "./App.css";
 
 
 export class App extends Component {
+
+
   constructor(props) {
     super(props);
 
@@ -33,12 +36,16 @@ export class App extends Component {
         selected: false,
         edit: false
       },
-      visible: false
     };
+  }
+  componentWillMount(){
+    this.props.geolocation();
   }
 
   componentDidMount() {
+    console.log("City: ", this.props);
     this.props.set_time(times);
+    
   }
 
   /**
@@ -108,7 +115,7 @@ export class App extends Component {
       select_time(id)
       user_selection(user)
       NotificationManager.info(`You selected ${hour} `, "Yupppeeeee, you did");
-      this.setState({ open: false });
+      this.setState({ open: false, active : true });
       this.edit_status(false)
     } catch (error) {
       NotificationManager.error("Input should not be empty, try again");
@@ -149,13 +156,12 @@ export class App extends Component {
 
   render() {
     const { current_user: { edit, selected } } = this.state;
-    const { time } = this.props.schedule;
 
     return (
       <div className="wrapper">
 
         <Header />
-        <Hour time={time} pick_time={this.pick_time}>
+        <Hour pick_time={this.pick_time} {...this.props} {...this.state}>
           <Modal
             edit_status={this.edit_status}
             close={this.close}
@@ -196,7 +202,8 @@ const mapDispatchToProps = (dispatch) => {
     select_time: (id) => dispatch(select_time(id)),
     edit_toggle: (bool, id) => dispatch(edit_toggle(bool, id)),
     set_info: (name, value, id) => dispatch(set_info(name, value, id)),
-    user_selection: (user) => dispatch(user_selection(user))
+    user_selection: (user) => dispatch(user_selection(user)),
+    geolocation: () => dispatch(geolocation())
   }
 }
 

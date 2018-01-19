@@ -67,9 +67,16 @@ const schedule = (state = initial_state, action) => {
                     }
                 })
             }    
+        case "GET_GEOLOCATION_FULFILLED":
+            return {
+                ...state,
+                city: action.payload.data.city
+            }
+
         default:
             return state;
     }
 }
 
 export default schedule;
+
