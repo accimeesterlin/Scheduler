@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { 
-  NotificationContainer, 
-  NotificationManager 
+import {
+  NotificationContainer,
+  NotificationManager
 } from 'react-notifications';
 import {
   set_time,
@@ -11,13 +11,17 @@ import {
   user_selection,
   set_info
 } from "./actions/actions";
+import {
+  Header,
+  Footer,
+  Modal,
+  Form,
+  DisplaySchedule,
+  Hour
+} from "./components/index";
 import 'react-notifications/lib/notifications.css';
 import times from './times';
 import "./App.css";
-import ModalComponent from "./components/Modal";
-import DisplaySchedule from "./components/DisplaySchedule";
-import Form from "./components/Form";
-import {formatPhoneNumber} from "./utils";
 
 
 export class App extends Component {
@@ -27,8 +31,9 @@ export class App extends Component {
     this.state = {
       current_user: {
         selected: false,
-        edit:false
-      }
+        edit: false
+      },
+      visible: false
     };
   }
 
@@ -64,15 +69,22 @@ export class App extends Component {
   get_values = (event) => {
     const name = event.target.name;
     let values = event.target.value;
+    this.validate_phone(name, values);
+  };
+
+
+  validate_phone = (name, values) => {
     const { id } = this.state;
-    console.log("Hello World!!!");
-    this.props.set_info(name, values, id);
 
-    if(name === "phoneNumber" && formatPhoneNumber(values).length === 14){
-      values = formatPhoneNumber(values)
-      console.log("State: ", this.state);
+    if (name === "phoneNumber") {
+      if (values.length <= 10) {
+        this.props.set_info("phoneNumber", values, id);
+      } else {
+        NotificationManager.error("You have exceeded your phone number limit");
+      }
+    } else {
+      this.props.set_info("name", values, id);
     }
-
   };
 
   /**
@@ -84,20 +96,23 @@ export class App extends Component {
    * Pops up a notification to confirm that time has successfully been selected
    */
   submit_result = () => {
-    const { hour, id,  current_user: {info: { name, phoneNumber }} } = this.state;
-    const { select_time, user_selection } = this.props
+    try {
+      const { hour, id, current_user: { info: { name, phoneNumber } } } = this.state;
+      const { select_time, user_selection } = this.props
 
-    let user = {
-      name,
-      phoneNumber,
-      id
-    };
-
-    select_time(id)
-    user_selection(user)
-    NotificationManager.info(`You selected ${hour} `, "Yupppeeeee, you did");
-    this.setState({ open: false });
-    this.edit_status(false)
+      let user = {
+        name,
+        phoneNumber,
+        id
+      };
+      select_time(id)
+      user_selection(user)
+      NotificationManager.info(`You selected ${hour} `, "Yupppeeeee, you did");
+      this.setState({ open: false });
+      this.edit_status(false)
+    } catch (error) {
+      NotificationManager.error("Input should not be empty, try again");
+    }
   };
 
 
@@ -110,7 +125,7 @@ export class App extends Component {
    */
   close = () => {
     this.edit_status(false)
-    this.setState({ open: false, current_user:{ edit: false} })
+    this.setState({ open: false, current_user: { edit: false }, visible: false })
   };
 
 
@@ -122,10 +137,10 @@ export class App extends Component {
    * @param bool
    */
   edit_status = (bool) => {
-    const {selected, id} = this.state.current_user;
-    if(selected){
+    const { selected, id } = this.state.current_user;
+    if (selected) {
       this.props.edit_toggle(bool, id);
-    } else{
+    } else {
       NotificationManager.error(`Enter your info in order to be able to see it`);
     }
   };
@@ -133,37 +148,33 @@ export class App extends Component {
 
 
   render() {
-    const { current_user : { edit, selected }} = this.state;
+    const { current_user: { edit, selected } } = this.state;
     const { time } = this.props.schedule;
 
-    console.log("State: ", this.state);
     return (
-      <div className = "hour__container">
-        {
-          time ? time.map(({ hour, id, selected }, index) => (
-            <div
-              key={id}
-              className={selected ? "selected hour" : "hour"}
-              onClick={() => this.pick_time(id, hour, index)}
-            >
-              <p >{hour} </p>
-            </div>
-          )) : ""
-        }
+      <div className="wrapper">
 
+        <Header />
+        <Hour time={time} pick_time={this.pick_time}>
+          <Modal
+            edit_status={this.edit_status}
+            close={this.close}
+            {...this.state }
+            { ...this.props.schedule }
+          >
+            {
+              selected && !edit ? <DisplaySchedule {...this.state} /> : <Form
+                submit_result={this.submit_result}
+                get_values={this.get_values}
+                {...this.state}
+              />
+            }
+          </Modal>
 
-        <ModalComponent {...this.state }  { ...this.props.schedule } edit_status={this.edit_status} close={this.close}>
-          {
-            selected && !edit ? <DisplaySchedule {...this.state} /> : <Form
-              submit_result={this.submit_result}
-              get_values={this.get_values}
-              {...this.state}
-            />
-          }
-        </ModalComponent>
+          <NotificationContainer />
+        </Hour>
 
-
-        <NotificationContainer />
+        <Footer />
       </div>
     );
   }

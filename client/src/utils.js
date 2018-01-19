@@ -1,6 +1,5 @@
 
 
-
 module.exports = {
     formatPhoneNumber: (num) => {
         const s2 = ("" + num).replace(/\D/g, '');

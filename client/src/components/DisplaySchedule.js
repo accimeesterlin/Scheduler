@@ -1,4 +1,5 @@
 import React from "react";
+import {formatPhoneNumber} from "../utils";
 
 
 const Display = ({ 
@@ -15,7 +16,7 @@ const Display = ({
             <h2>You picked!</h2>
             <h4>Name: {name}</h4>
             <p>Hour Selected: {hour} </p>
-            <p>Phone number: {phoneNumber} </p>
+            <p>Phone number: {formatPhoneNumber(phoneNumber)} </p>
         </div>
     );
 };

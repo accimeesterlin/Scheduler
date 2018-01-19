@@ -1,0 +1,21 @@
+
+footer{
+    border:1px solid #e1e8ed;
+    padding:30px;
+    background:#f6f6f6;
+    position: absolute;
+    bottom:0;
+    height:95px;
+  }
+  
+  
+  footer  ul  li {
+    margin-left: 20px;
+    list-style: none;
+  }
+  footer  ul  li a {
+    text-decoration: none;
+    color:#555;
+    margin:5px;
+  }
+  

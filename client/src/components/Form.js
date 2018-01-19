@@ -2,13 +2,23 @@
 import React from "react";
 import { Form, Button } from "semantic-ui-react";
 
+
+
 const FormComponent = ({
     submit_result,
     get_values,
     current_user
 }) => {
 
-    console.log("Current User: ", current_user);
+    let name, phoneNumber, info;
+
+    try {
+        name = current_user.info.name;
+        phoneNumber = current_user.info.phoneNumber;
+        info = current_user.info;
+    } catch (error) {
+        
+    }
 
     return (
         <Form size={"small"} >
@@ -17,7 +27,7 @@ const FormComponent = ({
                     label='Name'
                     control='input'
                     name="name"
-                    value = {current_user.info ? current_user.info.name : ''}
+                    value = {info ? name : ''}
                     placeholder='Name...'
                     onChange={get_values} />
                 <Form.Field
@@ -25,7 +35,7 @@ const FormComponent = ({
                     control='input'
                     name="phoneNumber"
                     type="number"
-                    value = {current_user.info ? current_user.info.phoneNumber : ''}
+                    value = {info ? phoneNumber : ''}
                     placeholder='(xxx) xxx-xxxx'
                     onChange={get_values} />
             </Form.Group>
