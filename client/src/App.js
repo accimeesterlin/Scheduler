@@ -38,14 +38,14 @@ export class App extends Component {
       },
     };
   }
-  componentWillMount(){
-    this.props.geolocation();
+  componentWillMount() {
+
   }
 
   componentDidMount() {
-    console.log("City: ", this.props);
+    this.props.geolocation();
     this.props.set_time(times);
-    
+
   }
 
   /**
@@ -80,11 +80,16 @@ export class App extends Component {
   };
 
 
+
+  /**
+   * Validating 10 digits phone number
+   * Notifies once they go over 10 digits
+   */
   validate_phone = (name, values) => {
     const { id } = this.state;
 
     if (name === "phoneNumber") {
-      if (values.length <= 10) {
+      if (values.length <= 12) {
         this.props.set_info("phoneNumber", values, id);
       } else {
         NotificationManager.error("You have exceeded your phone number limit");
@@ -115,7 +120,7 @@ export class App extends Component {
       select_time(id)
       user_selection(user)
       NotificationManager.info(`You selected ${hour} `, "Yupppeeeee, you did");
-      this.setState({ open: false, active : true });
+      this.setState({ open: false, active: true });
       this.edit_status(false)
     } catch (error) {
       NotificationManager.error("Input should not be empty, try again");
@@ -154,6 +159,7 @@ export class App extends Component {
 
 
 
+
   render() {
     const { current_user: { edit, selected } } = this.state;
 
@@ -169,13 +175,21 @@ export class App extends Component {
             { ...this.props.schedule }
           >
             {
-              selected && !edit ? <DisplaySchedule {...this.state} /> : <Form
-                submit_result={this.submit_result}
-                get_values={this.get_values}
-                {...this.state}
-              />
+              selected && !edit ?
+                <DisplaySchedule
+                  {...this.state}
+                />
+
+                :
+
+                <Form
+                  submit_result={this.submit_result}
+                  get_values={this.get_values}
+                  {...this.state}
+                />
             }
           </Modal>
+          
 
           <NotificationContainer />
         </Hour>

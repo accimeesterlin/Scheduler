@@ -1,14 +1,14 @@
 import React from "react";
-import {formatPhoneNumber} from "../utils";
+import { formatPhoneNumber } from "../utils";
 
 
-const Display = ({ 
-    current_user: { 
-        hour, 
-        info: { 
-            name, 
-            phoneNumber 
-        } 
+const Display = ({
+    current_user: {
+        hour,
+    info: {
+            name,
+        phoneNumber
+        }
     }
 }) => {
     return (

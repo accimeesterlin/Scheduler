@@ -17,7 +17,8 @@ describe("Testing Actions creators", () => {
       time: [],
       size: "small"
     },
-    set_time: () => { }
+    set_time: () => { },
+    geolocation: () => { }
   };
 
 
