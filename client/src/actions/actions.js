@@ -9,7 +9,7 @@ export const set_time = (time) => {
 };
 
 
-// Verified
+// Verified *2
 export const select_time = (id) => {
     return{
         type:"TIME_SELECTED",
@@ -17,6 +17,8 @@ export const select_time = (id) => {
     }
 };
 
+
+// Verified*2
 export const edit_toggle = (bool, id) => {
     return{
         type:"EDIT_TOGGLE",
@@ -26,10 +28,20 @@ export const edit_toggle = (bool, id) => {
 };
 
 
-// Verified
+// Verified *2
 export const user_selection = (info) => {
     return {
         type:"USER_SELECTION",
         info
+    }
+};
+
+
+export const set_info = (name, value, id) => {
+    return {
+        type:"SET_INFO",
+        name,
+        value,
+        id
     }
 };

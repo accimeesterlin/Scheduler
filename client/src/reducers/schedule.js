@@ -23,6 +23,22 @@ const schedule = (state = initial_state, action) => {
                 })
             };
 
+        case "SET_INFO":
+            return {
+                ...state,
+                time: state.time.map((element) => {
+                    if(element.id === action.id){
+                        element["info"] = {
+                            ...element.info,
+                            [action.name]: action.value
+                        }
+                        return element;
+                    } else {
+                        return element;
+                    }
+                })
+            }
+
         case "EDIT_TOGGLE":
             return {
                 ...state,

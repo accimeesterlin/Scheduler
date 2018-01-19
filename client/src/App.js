@@ -8,7 +8,8 @@ import {
   set_time,
   select_time,
   edit_toggle,
-  user_selection
+  user_selection,
+  set_info
 } from "./actions/actions";
 import 'react-notifications/lib/notifications.css';
 import times from './times';
@@ -63,18 +64,15 @@ export class App extends Component {
   get_values = (event) => {
     const name = event.target.name;
     let values = event.target.value;
-
-    
+    const { id } = this.state;
+    console.log("Hello World!!!");
+    this.props.set_info(name, values, id);
 
     if(name === "phoneNumber" && formatPhoneNumber(values).length === 14){
       values = formatPhoneNumber(values)
       console.log("State: ", this.state);
     }
 
-    this.setState({
-      [name]: values
-    });
-    
   };
 
   /**
@@ -86,7 +84,7 @@ export class App extends Component {
    * Pops up a notification to confirm that time has successfully been selected
    */
   submit_result = () => {
-    const { hour, id, name, phoneNumber } = this.state;
+    const { hour, id,  current_user: {info: { name, phoneNumber }} } = this.state;
     const { select_time, user_selection } = this.props
 
     let user = {
@@ -137,6 +135,8 @@ export class App extends Component {
   render() {
     const { current_user : { edit, selected }} = this.state;
     const { time } = this.props.schedule;
+
+    console.log("State: ", this.state);
     return (
       <div className = "hour__container">
         {
@@ -157,6 +157,7 @@ export class App extends Component {
             selected && !edit ? <DisplaySchedule {...this.state} /> : <Form
               submit_result={this.submit_result}
               get_values={this.get_values}
+              {...this.state}
             />
           }
         </ModalComponent>
@@ -183,6 +184,7 @@ const mapDispatchToProps = (dispatch) => {
     set_time: (times) => dispatch(set_time(times)),
     select_time: (id) => dispatch(select_time(id)),
     edit_toggle: (bool, id) => dispatch(edit_toggle(bool, id)),
+    set_info: (name, value, id) => dispatch(set_info(name, value, id)),
     user_selection: (user) => dispatch(user_selection(user))
   }
 }
